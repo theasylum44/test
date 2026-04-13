@@ -1,12 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generic Test Page</title>
+    <!--<Testing staging to main/>-->
+    <title>Jocko River Watershed</title>
+    <meta property="og:description" content="Uses the PMTiles plugin and protocol to present a map." />
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.17.0/dist/maplibre-gl.css' />-->
+    <!--script src='https://unpkg.com/maplibre-gl@5.17.0/dist/maplibre-gl.js'></script>-->
+    <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl-layers-control.min.js"></script>
+    <!--<link href="style.css" rel="stylesheet"/>-->
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@5.17.0/dist/maplibre-gl.css' />
+    <script src="https://unpkg.com/pmtiles@3.2.0/dist/pmtiles.js"></script>
+    <script src='https://unpkg.com/@maplibre/maplibre-gl-inspect@latest/dist/maplibre-gl-inspect.js'></script>
+    <link href='https://unpkg.com/@maplibre/maplibre-gl-inspect@latest/dist/maplibre-gl-inspect.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body, #map { height: 100%; }
+    </style>
 </head>
 <body>
-    <h1>Test Page Heading</h1>
-    <p>This is a paragraph for testing basic text rendering.</p>
+<div id="map"></div>
+<script>
+    const protocol = new pmtiles.Protocol();
+    maplibregl.addProtocol('pmtiles', protocol.tile);
+
+    const map = new maplibregl.Map({
+        container: 'map',
+        zoom:10.25,
+        center: [-113.9260, 47.1392],
+        pitch: 0,
+        attributionControl: true,
+        style: 'style.json',
+        });
+
+//    map.on('load', () => {
+//    map.addSource('Jocko Perimeters', {
+//        'type': 'vector',
+//        'url': 'pmtiles://https//localhost/assets/img/JockoPerimeters.pmtiles',
+//        'url': 'pmtiles://assets/img/JockoPerimeters.pmtiles',
+//        'attribution': 'erik'
+//    });
+
+    map.addControl(new maplibregl.NavigationControl());
+    map.addControl(new MaplibreInspect({
+//        showInspectMap: true,
+        showInspectButton: false,
+        showMapPopup: true,
+        showMapPopupOnHover: true,
+//        showInspectMapPopupOnHover: false,
+        properties: ['INCIDENT', 'FIRE_YEAR', 'GIS_ACRES', 'FireDiscoveryDateTime', 'FireOutDateTime'],
+//        renderPopup: (features) => {
+//           return
+//                 features.map(feature => {
+//                    return `<div><strong>${feature.properties.INCIDENT}</strong><br>
+//                    Year: ${feature.properties.FIRE_YEAR}<br>
+//                    Acres: ${feature.properties.GIS_ACRES}<br>
+//                    Discovery Date: ${feature.properties.FireDiscoveryDateTime}<br>
+//                    Declared Out Date: ${feature.properties.FireOutDateTime}</div>`;
+//                }).join('');
+//        },
+
+        // queryParameters: {
+        //     layers: [
+        //         'Dirty Corner 2024',
+        //         'Ravalli 2023',
+        //         'Big Knife 2023',
+        //         'Squeque 2021',
+        //         'Finley 2021',
+        //         'Crooks 2021',
+        //         'Liberty 2017',
+        //         'Black 2017',
+        //         'Firestone 2013',
+        //         'White Horse 2012',
+        //         'Blackcat 2007',
+        //         'Jocko Lakes 2007',
+        //         'Gold Creek 2006',
+        //         'Boles Meadow 2003',
+        //         'Mineral Primm 2003',
+        //         'Schley 2000',
+        //         'NA 1979',
+        //         'NA 1960',
+        //         'NA 1953',
+        //         'NA 1945',
+        //         'NA 1931',
+        //         'NA 1920',
+        //         'NA 1919 (1)',
+        //         'NA 1919 (2)',
+        //         'NA 1919 (3)',
+        //         'NA 1917 (1)',
+        //         'NA 1917 (2)',
+        //         'NA 1910'
+        //         ]
+        // }
+
+    }));
+
+  let layersControl = new LayersControl({
+        title: 'Layers',
+   });
+  map.addControl(layersControl, "bottom-left");
+</script>
 </body>
 </html>
